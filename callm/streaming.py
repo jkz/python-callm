@@ -50,8 +50,6 @@ class Creek(CallmInterface):
             return None
         return self.response.readline(delimiter)
 
-    from apps.utils.decorators import shoutout
-    @shoutout
     def _run(self):
         # Connect and process the stream
         error_counter = 0
@@ -109,8 +107,6 @@ class Creek(CallmInterface):
         self._cache('mode', 'stream')
         return self
 
-    from apps.utils.decorators import shoutout
-    @shoutout
     def start(self, callm=None, async=False):
         """Open a stream with a callm request."""
         if callm:
