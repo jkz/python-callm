@@ -4,8 +4,8 @@ import unittest
 
 from . import dummy
 
-from ..streaming import CreekClient
-from ..response import Responsm
+from callm.streaming import CreekClient
+from callm.response import Responsm
 
 class CallmTestCase(unittest.TestCase):
     def setUp(self):
@@ -74,7 +74,6 @@ class TestAuth(CallmTestCase):
     def test_basic(self):
         class MyAuth(Auth):
             def __call__(self, burl, method='GET', body='', headers={}):
-                print locals()
                 headers['kitten'] = 'bacon'
                 burl.query['puppy'] = 'cake'
         self.conn.auth = MyAuth() 
@@ -84,7 +83,7 @@ class TestAuth(CallmTestCase):
         
         
 
-from ..connection import CallmInterface
-from ..callm import Callm
-from ..burl import Burl
-from ..auth import Auth
+from callm.connection import CallmInterface
+from callm.callm import Callm
+from callm.burl import Burl
+from callm.auth import Auth
