@@ -116,6 +116,7 @@ class Callm(dict):
             request = (method, self['burl'].url, body, headers)
             if auth is not None:
                 request = auth(*request)
+                self['burl'] = Burl(request[1])
 
             # A 4 tuple suitable for httplib.HTTPConnection.request
             self['request'] = request
