@@ -25,8 +25,5 @@ class CallmHTTPError(CallmError):
                 self.e.code, self.uri, fmt, self.uriparts,
                 self.response_data))
 
-class CreekError(CallmError):
-    pass
-
 class ResponsmError(CallmError):
     pass

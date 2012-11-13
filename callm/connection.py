@@ -3,7 +3,7 @@ import time
 
 from .response import Responsm
 
-class CallmInterface(object):
+class Connection(object):
     """
     An ABC mixin providing http request method calls.
 
@@ -62,10 +62,16 @@ class CallmInterface(object):
     reconnect_time = 5.0  #seconds
 
     headers = {}
-    
+
     connection = None
 
     auto_callm = False
+
+    def __init__(self, host=None, **kwargs):
+        if host:
+            self.host = host
+        for key, val in kwargs.items():
+            setattr(self, key, val)
 
     @property
     def netloc(self):
@@ -82,10 +88,10 @@ class CallmInterface(object):
             return 'https'
         else:
             return 'http'
-    
+
     def connect(self, host=None, port=None, timeout=None, strict=None):
         """
-        Open the appropriate connection with the specified host. 
+        Open the appropriate connection with the specified host.
         """
         # Return if the connection is opened already
         if self.connection is not None:
@@ -127,7 +133,7 @@ class CallmInterface(object):
 
     def request(self, method, url, body=None, headers={}):
         """
-        Thin wrapper around httplib request, opening a connection if needed.         
+        Thin wrapper around httplib request, opening a connection if needed.
         """
         # Open a connection if it is not manually handled
         if self.auto_connect:
@@ -237,12 +243,6 @@ class CallmInterface(object):
     @property
     def HEAD(self):
         return self.build_callm(method='HEAD')
-
-
-
-class Connection(CallmInterface):
-    def __init__(self, host):
-        self.host = host
 
 # Circumvent circular circumstance
 from .callm import Callm

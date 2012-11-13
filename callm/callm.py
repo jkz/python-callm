@@ -44,6 +44,8 @@ class Callm(dict):
             #     api.first._('second').third
             return extend_call if part == '_' else extend_call(part)
 
+    #TODO Cleanup call and do these parameters as __getattr__ on the returned
+    #     object.
     def __call__(self,
             tail = '',
             fragment = None,
@@ -134,7 +136,7 @@ class Callm(dict):
         elif mode == 'stream':
             self['mode'] = 'call'
             self['connection'].start(self)
-        
+
         # Submit the request and return the response
         elif mode == 'call':
             return self['connection'].fetch(*self['request'])

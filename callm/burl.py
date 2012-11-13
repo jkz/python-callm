@@ -1,7 +1,7 @@
 import urlparse
 import urllib
 
-from .connection import CallmInterface
+from .connection import Connection
 
 class Burl(object):
     """
@@ -44,7 +44,7 @@ class Burl(object):
             **kwargs
     ):
         # Determines whether paramters are combined encoded or verbatim
-        self.verbatim = verbatim    
+        self.verbatim = verbatim
 
         if url is None:
             url = ''
@@ -58,11 +58,8 @@ class Burl(object):
 
         # Set the connection on self to extract parameters and enable requests.
         #XXX: Add a mode that does not alter the connection
-        if connection is not None:
-            self.connection = connection
-        else:
-            self.connection = CallmInterface()
-                
+        self.connection = connection or Connection()
+
         _host, _, _port = _netloc.partition(':')
 
         # Set security level on the connection
@@ -84,7 +81,7 @@ class Burl(object):
             self.connection.port = port
         elif _port:
             self.connection.port = _port
-        
+
         # Set the path
         if path is not None:
             self.path = path

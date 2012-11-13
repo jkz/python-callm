@@ -3,10 +3,10 @@ import time
 import socket
 import threading
 
-from .connection import CallmInterface
-from .error import CreekError
+from .connection import Connection
+from . import errors
 
-class CreekListener(object):
+class Listener(object):
     def on_data(self, data):
         print data
         return True
@@ -19,7 +19,7 @@ class CreekListener(object):
         """Called when stream connection times out"""
         return True
 
-class Creek(CallmInterface):
+class Creek(Connection):
     """
     A Callm stream client.
     """
@@ -32,10 +32,23 @@ class Creek(CallmInterface):
     mode = 'stream'
     streaming = True
 
-
     running = False
     endpoint = None
     _response = None
+
+    class Error(errors.Error): pass
+
+    def __init__(self, host=None, auth=None, listener=None, **options):
+        if host:
+            self.host = host
+        self.listener = listener or Listener()
+        self.auth = auth
+
+        OPTIONS = ("timeout", "retry_count", "retry_time",
+                   "snooze_time", "buffer_size", "secure",)
+
+        for key in OPTIONS:
+            setattr(self, key, options.get(key, getattr(self, key)))
 
     def retry_time(self, error_count):
         return 10.0
@@ -112,7 +125,7 @@ class Creek(CallmInterface):
         if callm:
             self.endpoint = callm
         if self.running is True:
-            raise CreekError('Stream running already!')
+            raise self.Error('Stream running already!')
         self.running = True
         print 'RUNNING'
         if async:
@@ -143,7 +156,7 @@ class Creek(CallmInterface):
 class CreekClient(Creek):
     def __init__(self, host, listener=None, auth=None, **options):
         self.host = host
-        self.listener = listener or CreekListener()
+        self.listener = listener or Listener()
         self.auth = auth
 
         OPTIONS = ("timeout", "retry_count", "retry_time",

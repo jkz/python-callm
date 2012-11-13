@@ -8,7 +8,7 @@ class Responsm(object):
     """
     Response from a callm request.
     Can represent data in different formats by calling the corresponding
-    attribute. 
+    attribute.
 
     TODO: Behaviour is not optimal with streaming responses. Perhaps a read()
     wrapper should be added with a buffer and an index.
