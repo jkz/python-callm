@@ -2,7 +2,7 @@
 
 from .response import Responsm
 from .connection import Connection
-from .error import Error
+from .errors import Error
 from .callm import Callm
 from .burl import Burl, Url, Uri
-from .streaming import Creek, Listener
+from .streams import Creek, Listener
