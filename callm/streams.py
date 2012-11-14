@@ -3,7 +3,7 @@ import time
 import socket
 import threading
 
-from .connection import Connection
+from .connections import Connection
 from . import errors
 
 class Listener(object):
@@ -19,7 +19,7 @@ class Listener(object):
         """Called when stream connection times out"""
         return True
 
-class Creek(Connection):
+class Stream(Connection):
     """
     A Callm stream client.
     """
@@ -153,14 +153,3 @@ class Creek(Connection):
             data += c
         return data
 
-class CreekClient(Creek):
-    def __init__(self, host, listener=None, auth=None, **options):
-        self.host = host
-        self.listener = listener or Listener()
-        self.auth = auth
-
-        OPTIONS = ("timeout", "retry_count", "retry_time",
-                   "snooze_time", "buffer_size", "secure",)
-
-        for key in OPTIONS:
-            setattr(self, key, options.get(key, getattr(self, key)))

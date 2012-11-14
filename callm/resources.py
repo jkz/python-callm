@@ -1,16 +1,14 @@
 import urlparse
 import urllib
 
-from .connection import Connection
+from .connections import Connection
 
-class Burl(object):
+class Resource(object):
     """
     A flexible url builder class. Deconstructs a given url into parts, then
     sets or replaces parts by explicitly passed parts.
 
     Usage example:
-
-    >>> Burl('
 
     >>> Burl('example.com/foo?kitten=cake', host='otherhost.net',
     ...         kitten='fluffy', secure=True).url
@@ -102,7 +100,7 @@ class Burl(object):
 
     @property
     def query_string(self):
-        return QueryString(self.query, self.verbatim)
+        return Query(self.query, self.verbatim)
 
     @property
     def host_parts(self):
@@ -140,17 +138,17 @@ class Burl(object):
     def __call__(self, **kwargs):
         self.connection()(self.uri, **kwargs)
 
-class Url(str):
+class URL(str):
     def __new__(self, *args, **kwargs):
-        burl = Burl(*args, **kwargs)
-        return str.__new__(self, burl.url)
+        resource = Resource(*args, **kwargs)
+        return str.__new__(self, resource.url)
 
-class Uri(str):
+class URI(str):
     def __new__(self, *args, **kwargs):
-        burl = Burl(*args, **kwargs)
-        return str.__new__(self, burl.uri)
+        resource = Resource(*args, **kwargs)
+        return str.__new__(self, resource.uri)
 
-class QueryString(str):
+class Query(str):
     def __new__(self, query, verbatim=False, **kwargs):
         """
         Heads up!

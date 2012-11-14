@@ -1,7 +1,7 @@
 import httplib
 import time
 
-from .response import Responsm
+from .responses import Response
 
 class Connection(object):
     """
@@ -140,7 +140,7 @@ class Connection(object):
             self.connect()
         _headers = self.headers.copy()
         _headers.update(headers)
-        params = (method, Burl(url).uri, body, _headers)
+        params = (method, Resource(url).uri, body, _headers)
         self.connection.request(*params)
 
     def getresponse(self, **kwargs):
@@ -148,16 +148,16 @@ class Connection(object):
         A wrapper around httplib getresponse. Returns a Reponsm instance,
         potentially in a predifined format.
         """
-        response = self.connection.getresponse()
-        responsm = Responsm(response, self.streaming)
+        _response = self.connection.getresponse()
+        response = Response(_response, self.streaming)
         # Close the connection if it is not manually handled
         if self.auto_connect:
             self.disconnect()
         # Return formatted if specified
         format = kwargs.pop('format', self._flush('format'))
         if format:
-            return getattr(responsm, format)
-        return responsm
+            return getattr(response, format)
+        return response
 
     #XXX: needs work on arguments
     def fetch(self, *args, **kwargs):
@@ -217,7 +217,7 @@ class Connection(object):
         format = kwargs.pop('format', None)
         if format is not None:
             self._cache('format', format)
-        return Callm(*args, connection=self, auth=self.auth, method=method,
+        return Request(*args, connection=self, auth=self.auth, method=method,
                 secure=secure, mode=mode)
 
     @property
@@ -245,5 +245,5 @@ class Connection(object):
         return self.build_callm(method='HEAD')
 
 # Circumvent circular circumstance
-from .callm import Callm
-from .burl import Burl
+from .requests import Request
+from .resources import Resource

@@ -2,9 +2,9 @@ import json
 import urlparse
 import xml.dom.minidom
 
-from .error import ResponsmError
+from . import errors
 
-class Responsm(object):
+class Response(object):
     """
     Response from a callm request.
     Can represent data in different formats by calling the corresponding
@@ -14,6 +14,8 @@ class Responsm(object):
     wrapper should be added with a buffer and an index.
     TODO: Encoding is not yet handled properly
     """
+    class Error(errors.Error): pass
+
     def __init__(self, response, streaming=False):
         self.response = response
         self.headers = dict(response.getheaders())
@@ -57,15 +59,16 @@ class Responsm(object):
         try:
             return json.loads(self.utf8)
         except Exception, e:
-            raise ResponsmError("Could not parse json from data!", e)
+            raise self.Error("Could not parse json from data!", e)
 
     @property
     def xml(self):
         try:
             return xml.dom.minidom.parseString(self.utf8)
         except Exception, e:
-            raise ResponsmError("Could not parse xml from data!", e)
+            raise self.Error("Could not parse xml from data!", e)
 
     @property
     def query(self):
         return dict(urlparse.parse_qsl(self.raw))
+

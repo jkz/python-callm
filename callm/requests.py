@@ -1,4 +1,6 @@
-class Callm(dict):
+from . import errors
+
+class Request(dict):
     """
     Base class converts chained attribute gets into an url. When called,
     returns the httpresponse for the request url submitted to a connection.
@@ -8,6 +10,8 @@ class Callm(dict):
     Callm syntax is unhindered.
 
     """
+    class Error(errors.Error): pass
+
     def __init__(
             self,
             connection,
@@ -17,7 +21,7 @@ class Callm(dict):
             secure = False,
             headers = {},
             query = {}):
-        super(Callm, self).__init__(
+        super(Request, self).__init__(
                 connection = connection,
                 auth = auth,
                 method = method,
@@ -96,10 +100,10 @@ class Callm(dict):
 
             if method == 'POST' and False:
                 if not body:
-                    body = QueryString(query, **kwargs)
+                    body = Query(query, **kwargs)
 
             # Build the Burl object that represents the resource identifier
-            self['burl'] = Burl(
+            self['resource'] = Resource(
                     uri,
                     connection=self['connection'],
                     fragment=fragment,
@@ -115,10 +119,10 @@ class Callm(dict):
             else:
                 auth = self['connection'].auth
 
-            request = (method, self['burl'].url, body, headers)
+            request = (method, self['resource'].url, body, headers)
             if auth is not None:
                 request = auth(*request)
-                self['burl'] = Burl(request[1])
+                self['resource'] = Resource(request[1])
 
             # A 4 tuple suitable for httplib.HTTPConnection.request
             self['request'] = request
@@ -143,12 +147,12 @@ class Callm(dict):
 
         # Return a string representation of the url for the request
         elif mode == 'url':
-            return self['burl'].url
+            return self['resource'].url
 
-        elif mode == 'burl':
-            return self['burl']
+        elif mode == 'resource':
+            return self['resource']
 
     def _unicode__(self):
         return unicode(self['request'])
 
-from .burl import Burl, QueryString
+from .resources import Resource, Query

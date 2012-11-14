@@ -1,11 +1,7 @@
-class CallmError(Exception):
-    """
-    Base Exception thrown by the Callm object when there is a
-    general error interacting with an API.
-    """
+class Error(Exception):
     pass
 
-class CallmHTTPError(CallmError):
+class HTTPError(Error):
     """
     Exception thrown by the Callm object when there is an
     HTTP error interacting with a restful server
@@ -25,5 +21,3 @@ class CallmHTTPError(CallmError):
                 self.e.code, self.uri, fmt, self.uriparts,
                 self.response_data))
 
-class ResponsmError(CallmError):
-    pass

@@ -30,7 +30,7 @@ class Response(object):
         if not amount:
             return self.read(len(self))
         if self.index + amount > len(self):
-            raise CallmError('Too much data requested')
+            raise Exception('Too much data requested')
         if self.index + amount < len(self):
             data = self.data[self.index:self.index+amount]
             self.index += amount
