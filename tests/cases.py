@@ -4,8 +4,7 @@ import unittest
 
 from . import dummy
 
-from callm import Stream
-from callm import Response
+from callm import Request, Resource, Connection, Response, Stream
 
 class CallmTestCase(unittest.TestCase):
     def setUp(self):
@@ -70,7 +69,3 @@ class TestResource(CallmTestCase):
                       foo='bar')
         self.assertEqual(str(first), str(second))
 
-
-from callm.connections import Connection
-from callm.requests import Request
-from callm.resources import Resource
