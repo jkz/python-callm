@@ -1,4 +1,5 @@
 Callm
 =====
 
-Callm is a fancy python http/url library, geared towards calling Restful APIs with style.
+Callm is a sexy python http/url library, built to interact with (restful) web
+APIs.
