@@ -188,6 +188,11 @@ class Connection(object):
         return self
 
     @property
+    def debug(self):
+        self._cache('mode', 'debug')
+        return self
+
+    @property
     def url(self):
         self._cache('mode', 'url')
         return self

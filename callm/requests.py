@@ -98,9 +98,10 @@ class Request(dict):
             headers['User-Agent'] = self['headers'].pop('User-Agent', 'callm/0.0.1')
             headers = self['headers']
 
-            if method == 'POST' and False:
+            if method == 'POST':
                 if not body:
                     body = Query(query, **kwargs)
+                kwargs = {}
 
             # Build the Burl object that represents the resource identifier
             self['resource'] = Resource(
@@ -148,6 +149,9 @@ class Request(dict):
         # Return a string representation of the url for the request
         elif mode == 'url':
             return self['resource'].url
+
+        elif mode == 'debug':
+            return self['request']
 
         elif mode == 'resource':
             return self['resource']
