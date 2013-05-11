@@ -217,6 +217,9 @@ class URI(str):
         return str.__new__(self, resource.uri)
 
 
+'''
+    WORK IN PROGRESS
+
 class Endpoint(list):
     """
     Represents a partial request object. That fires when called.
@@ -253,7 +256,7 @@ class Endpoint(list):
             self.connection = Connection(connection)
 
     def update(self, path, query=None, headers=None, body=None, **kwargs):
-
+        pass
 
     def __call__(self):
         pass
@@ -263,6 +266,7 @@ class Request(object):
     Represents a request
     """
     def __init__(self,
+'''
 
 class Request(dict):
     """
@@ -643,7 +647,22 @@ class Response(object):
     #      wrapper should be added with a buffer and an index.
     #TODO: Encoding is not yet handled properly
     #TODO: return format equal to MIME-TYPE header
+    #TODO: Raise proper exceptions on non-200 responses
     class Error(Error): pass
+
+    class Http3xx(Error): pass
+    class Http4xx(Error): pass
+    class Http5xx(Error): pass
+
+    class Unauthorized(Http4xx): pass
+    class NotFound(Http4xx): pass
+    class ServerError(Http5xx): pass
+
+    Status = {
+        403: Unauthorized,
+        404: NotFound,
+        500: ServerError,
+    }
 
     def __init__(self, response, streaming=False):
         self.response = response
@@ -789,7 +808,7 @@ class Stream(Connection):
                     break
                 self.reconnect(self.snooze_time)
             except Exception, exception:
-                print 'EXCEPTION'
+                print 'EXCEPTION', exception
                 # any other exception is fatal, so kill loop
                 break
 
